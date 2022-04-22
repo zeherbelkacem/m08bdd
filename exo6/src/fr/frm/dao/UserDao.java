@@ -1,6 +1,5 @@
 package fr.frm.dao;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,6 +7,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.frm.entities.Article;
 import fr.frm.entities.Utilisateur;
 
 public class UserDao implements Dao<Utilisateur> {
@@ -15,13 +15,7 @@ public class UserDao implements Dao<Utilisateur> {
 	@Override
 	public List<Utilisateur> readAllObjs() {
 		List<Utilisateur> users = new ArrayList<Utilisateur>();
-		// db connection
-	//	Connection connection = connect.connection();
-
-		// loadDatabase();
-
-		// try (Connection connection = DriverManager.getConnection(url, login,
-		// password)) {
+	
 		try (Statement statement = connection.createStatement()) {
 			try (ResultSet resultSet = statement.executeQuery("SELECT *FROM t_users")) {
 
@@ -33,8 +27,6 @@ public class UserDao implements Dao<Utilisateur> {
 				}
 
 			}
-			// }
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -43,8 +35,7 @@ public class UserDao implements Dao<Utilisateur> {
 
 	@Override
 	public void createObj(Utilisateur t) {
-		// db connection
-		//Connection connection = connect.connection();
+		if (t== null) throw new NullPointerException("L'objet user est null");
 
 		try (PreparedStatement preparedStatement = connection
 				.prepareStatement("INSERT INTO t_users(login, password) VALUES(?,?)")) {
@@ -56,13 +47,11 @@ public class UserDao implements Dao<Utilisateur> {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	@Override
-	public void updateObj(Utilisateur t) {
-		// db connection
-		//Connection connection = connect.connection();
+	public boolean updateObj(Utilisateur t) {
+		boolean status = false;
 		try {
 			try (PreparedStatement preparedStatement = connection
 					.prepareStatement("update t_users set login = ?, password = ? where idUser = ?;")) {
@@ -70,39 +59,39 @@ public class UserDao implements Dao<Utilisateur> {
 				preparedStatement.setString(2, t.getPassword());
 				preparedStatement.setInt(3, t.getId());
 				if (preparedStatement.executeUpdate() == 1)
-					System.out.println("\nUser mis à jour");
+					status = true;
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
+		return status;
 	}
 
 	@Override
-	public void deleteObj(int id) {
+	public boolean deleteObj(int id) {
 		// db connection
-		//Connection connection = connect.connection();
-
+		// Connection connection = connect.connection();
+		boolean status  = false;
 		try {
 			try (PreparedStatement preparedStatement = connection
 					.prepareStatement("DELETE FROM t_users WHERE idUser = ?;")) {
 				preparedStatement.setInt(1, id);
 				if (preparedStatement.executeUpdate() == 1)
-					System.out.println("\nUtilisateur supprimé");
+					status = true;
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
+		return status;
 	}
 
 	@Override
 	public Utilisateur getObjById(int id) {
 		Utilisateur user = new Utilisateur(0, null, null);
 		// db connection
-		//Connection connection = connect.connection();
+		// Connection connection = connect.connection();
 
 		try {
 			try (PreparedStatement statement = connection
@@ -122,18 +111,40 @@ public class UserDao implements Dao<Utilisateur> {
 		return user;
 	}
 
-	/**
-	 * 
-	 */
 	@Override
-	public void loadDatabase() {
+	public List<Article> getArticlesByCategory(int idCategory) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-//		try {
-//			Class.forName(mariaDbDriver);
-//		} catch (ClassNotFoundException e) {
-//			e.printStackTrace();
-//		}
 
+	@Override
+	public int getUserId(String name) {
+		 	int rsUserId = 0;
+			try (PreparedStatement statement = connection
+					.prepareStatement("SELECT *FROM t_users WHERE login LIKE ?;")) {
+
+				statement.setString(1, name);
+				try (ResultSet resultSet = statement.executeQuery()) {
+					if (resultSet.next()) 
+						rsUserId = resultSet.getInt("idUser");
+				}
+			} catch (SQLException e) {
+				System.out.println(e.getMessage());
+			}
+		return rsUserId;
+	}
+
+	@Override
+	public int getLastInsertedId() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public List<String[]> getInvoice(int orderId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

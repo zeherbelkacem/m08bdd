@@ -24,7 +24,6 @@ public class TestMariaClient {
 	static String updateSql = "update t_articles set description = ?, brand = ?, unitaryprice = ? where idarticle = ?;";
 	static String deleteSql = "DELETE FROM t_articles WHERE idarticle = ?;";
 	static String getArticleByIdSql = "SELECT * FROM t_articles WHERE idarticle = ?;";
-	static String joinSql = "SELECT idarticle, description, brand, unitaryprice, catname FROM t_articles INNER JOIN category   WHERE t_articles.idcategory = category.idcategory and idarticle = ?;";
 
 	/********************** EXO4 **********************/
 	static Properties prop = readPropertiesFile("config.properties");

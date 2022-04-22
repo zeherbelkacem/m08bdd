@@ -50,3 +50,6 @@
 	GRANT ALL PRIVILEGES ON shop.* TO allPrevi@loacalhost;
 	GRANT SELECT ON shop.* TO readOnly@localhost IDENTIFIED BY 'readOnly'
 	GRANT INSERT, DELETE, UPDATE ON shop.* TO writeOnly@localhost IDENTIFIED BY 'writeOnly';
+
+
+	select t_order.idorder, t_order.orderdate, t_order.totalprice, t_articles.Description, t_articles.brand, orderline.linequantity, t_users.login from (((t_order inner join orderline on orderline.idorder=t_order.idorder) inner join t_users on t_users.idUser=t_order.iduser) inner join t_articles on t_articles.idarticle=orderline.idarticle);

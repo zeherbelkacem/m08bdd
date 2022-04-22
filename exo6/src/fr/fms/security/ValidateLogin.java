@@ -4,40 +4,36 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import javax.lang.model.element.NestingKind;
+
 import fr.frm.dao.BddConnection;
 import fr.frm.entities.Utilisateur;
 
-public class ValidateLogin {
+public class  ValidateLogin {
+
 	
-	//BddConnection connect = BddConnection.getConnection();
-	Connection connection = BddConnection.getConnection();
-	
+	// BddConnection connect = BddConnection.getConnection();
+
 	public boolean validateObjLogin(Utilisateur t) {
 		boolean status = false;
-		
-		// db connection
-		//Connection connection = connect.connection();
 		try {
-			try (PreparedStatement preparedStatement = connection
-					.prepareStatement("select * from t_users where login = ? and password = ? ")) {
-
-				preparedStatement.setString(1, t.getLogin());
-				preparedStatement.setString(2, t.getPassword());
-
-				if (preparedStatement.executeQuery().next())
-					status = true;
-				else
-					status = false;
-
-//					ResultSet rs = preparedStatement.executeQuery();
-//					status = rs.next();
-
+			try (Connection connection = BddConnection.getConnection()) {
+				try (PreparedStatement preparedStatement = connection
+						.prepareStatement("select * from t_users where login = ? and password = ? ")) {
+					preparedStatement.setString(1, t.getLogin());
+					preparedStatement.setString(2, t.getPassword());
+					
+					if (preparedStatement.executeQuery().next())
+						status = true;
+					else {
+						throw new SQLException("Utilisateur enixistant");
+					}
+				}
 			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
 		}
 		return status;
-
+		
 	}
 }

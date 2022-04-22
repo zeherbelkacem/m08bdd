@@ -17,7 +17,7 @@ public class BddConnection {
 		return bddConnection;
 	}
 	
-	public static Connection getConnection() {
+	public static Connection getConnection(){
 		/************************** CREDENTIALS ****************************/
 		ConfigFile configFile = new ConfigFile();
 		Properties prop = configFile.readPropertiesFile("config.properties");

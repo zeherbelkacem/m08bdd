@@ -6,15 +6,21 @@ public class Article {
 	private String brand;
 	private double price;
 	private int idCategory;
-//	private Category category;
+	private int quantity;
 	
-	public Article(int id, String description, String brand, double price) {
-		super();
+	public Article(int id, String description, String brand, double price, int quantity) {
 		this.id = id;
 		this.description = description;
 		this.brand = brand;
 		this.price = price;
-		//this.idCategory = idCategory;
+		this.setQuantity(quantity);
+	}
+
+	public Article(int id, String description, String brand, double price) {
+		this.id = id;
+		this.description = description;
+		this.brand = brand;
+		this.price = price;
 	}
 
 	public int getId() {
@@ -60,7 +66,15 @@ public class Article {
 	@Override
 	public String toString() {
 		return "Article [id=" + id + ", description=" + description + ", brand=" + brand + ", price=" + price
-				+ ", idCategory=" + idCategory + "]";
+				+ ", quantity=" + quantity + "]";
+	}
+
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
 	}
 
 	
